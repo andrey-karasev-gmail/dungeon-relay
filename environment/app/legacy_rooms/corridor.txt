@@ -1,0 +1,5 @@
+NAME: Stone Corridor
+DESC: A narrow stone corridor stretches between the entrance and the vault. Torches flicker on damp walls.
+EXITS: north=vault south=entrance
+ITEMS:
+RULES:

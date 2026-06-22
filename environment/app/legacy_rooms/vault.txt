@@ -1,0 +1,5 @@
+NAME: The Vault
+DESC: You have reached the vault! Ancient gold coins lie scattered across the stone floor.
+EXITS: south=corridor
+ITEMS: gold_coin
+RULES:

@@ -1,0 +1,13 @@
+{
+  "name": "dungeon-relay",
+  "version": "1.0.0",
+  "description": "DungeonRelay text adventure — API migration task",
+  "main": "runner.js",
+  "scripts": {
+    "start:api": "node api/server.js",
+    "play": "node api/server.js & sleep 1 && echo 'look\\ntake brass_key\\nuse brass_key north\\nlook\\ngo north\\nlook' | node runner.js; kill %1"
+  },
+  "dependencies": {
+    "express": "4.19.2"
+  }
+}

@@ -1,0 +1,5 @@
+NAME: Entrance Hall
+DESC: You stand in the dim entrance hall of Castle DungeonRelay. A brass key glints on the stone floor.
+EXITS: north=corridor
+ITEMS: brass_key
+RULES: north requires brass_key
