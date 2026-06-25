@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip3 install --no-cache-dir --break-system-packages \
     pytest==8.4.1 \
     pytest-json-ctrf==0.3.5 \
-    jsonschema==4.23.0
+    jsonschema==4.23.0 \
+    asciinema
 
 COPY app/package.json /app/package.json
 RUN cd /app && npm install --omit=dev
