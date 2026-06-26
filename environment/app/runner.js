@@ -1,26 +1,13 @@
 'use strict';
-/**
- * DungeonRelay runner — partially migrated to the local API.
- *
- * The two loadRoomFromFile() calls below still open legacy_rooms/*.txt.
- * Replace them with calls to GET /api/room?id=<roomId> so the runner uses
- * the API as its sole source of room data.
- *
- * See docs/API.md for the full API reference.
- * Run the API server first:  node api/server.js
- */
 
 const http = require('http');
 const fs   = require('fs');
 const path = require('path');
 const rl   = require('readline').createInterface({ input: process.stdin, terminal: false });
 
-// ── LEGACY room loader ────────────────────────────────────────────────────────
-// Reads room data directly from legacy_rooms/<id>.txt.
-// TODO: remove this function — use GET /api/room?id=<id> instead.
 function loadRoomFromFile(roomId) {
   const file = path.join('/app/legacy_rooms', `${roomId}.txt`);
-  const raw  = fs.readFileSync(file, 'utf8');   // opens legacy_rooms/<id>.txt
+  const raw  = fs.readFileSync(file, 'utf8');
   const room = { id: roomId, exits: {}, items: [], rules: {} };
   for (const line of raw.split('\n').map(l => l.trim()).filter(Boolean)) {
     if (line.startsWith('NAME:'))  room.name = line.slice(5).trim();
@@ -35,7 +22,6 @@ function loadRoomFromFile(roomId) {
   }
   return room;
 }
-// ─────────────────────────────────────────────────────────────────────────────
 
 function collectLines() {
   return new Promise(resolve => {
@@ -63,19 +49,15 @@ async function main() {
   const [init, allLines] = await Promise.all([apiPost('/api/init', {}), collectLines()]);
   let { sessionId, state } = init;
 
-  // LEGACY: load initial room from file to validate exits before first command.
-  // TODO: replace with GET /api/room?id=<id>
-  let roomInfo = loadRoomFromFile(state.currentRoom);   // ← opens legacy_rooms/*.txt
+  let roomInfo = loadRoomFromFile(state.currentRoom);
 
   for (const rawLine of allLines) {
     const command = rawLine.trim();
     if (!command) continue;
 
-    // LEGACY: pre-validate direction exits against the file before calling API.
-    // TODO: remove this block — the API already handles invalid directions.
     if (command.startsWith('go ') || command.startsWith('use ')) {
       const direction = command.split(/\s+/).pop();
-      roomInfo = loadRoomFromFile(state.currentRoom);   // ← opens legacy_rooms/*.txt
+      roomInfo = loadRoomFromFile(state.currentRoom);
       if (command.startsWith('go ') && !roomInfo.exits[direction]) {
         console.log(JSON.stringify({ command, room: state.currentRoom, description: roomInfo.description,
           exits: Object.keys(roomInfo.exits), items: roomInfo.items, inventory: state.inventory,

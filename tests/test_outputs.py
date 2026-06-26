@@ -37,6 +37,21 @@ def run_runner():
     )
 
 
+def test_runner_depends_on_api():
+    """runner.js must fail when the API server is not running on port 3000."""
+    r = subprocess.run(
+        ['node', '/app/runner.js'],
+        input='look\n',
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert r.returncode != 0, (
+        "runner.js succeeded without an API server — "
+        "it may be using hardcoded room data instead of calling the API."
+    )
+
+
 def test_runner_exits_zero(api_server):
     """runner.js must exit with code 0 on a normal playthrough."""
     r = run_runner()
