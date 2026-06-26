@@ -9,3 +9,4 @@ Agent modifies test files or writes directly to `reward.txt`, -5
 Agent produces output for fewer than 6 commands or outputs the wrong room sequence, -3
 Agent constructs the API URL incorrectly (wrong host, port, or path) causing HTTP connection errors, -2
 Agent adds a comment containing `legacy_rooms` as a migration note, causing the source check to fail, -2
+
